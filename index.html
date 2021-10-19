@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta property="og:url"           content="https://allantori.github.io" />
+	<meta property="og:type"          content="Portfolio" />
+	<meta property="og:title"         content="3D Portfolio" />
+	<meta property="og:description"   content="" />
+	<meta property="og:image"         content="https://allantori.github.io" />
+    <title> Portfólio Web - Allan Tori </title>
+    <link rel="shortcut icon" href="TemplateData/logo.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>  
+    <script src="Build/UnityLoader.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	
+    <script>
+	//jquery
+	$( function() { 	
+	   $('.down').click( function() { 
+		   console.log("about me 4");
+		   $('html,body').animate( {scrollTop:$('#aboutme').offset().top}, 1000);
+	   });    
+	});	
+	//end jquery	
+	var gameInstance = UnityLoader.instantiate("gameContainer", "Build/BuildKim.json");
+	var d = new Date();
+	var recenter = 0;
+	var center_y = window.innerHeight/2;
+	var start_all = false;
+	var json;
+	var holdingClick = false;
+	var cursorX = 0;
+	var cursorY = 0;
+	var sensibility = 200;
+	json = {
+	"Frame_realidadeVirtual":[ "http://www.dinosdobrasil.com.br/index-en.html", "http://www.vrmonkey.com.br/projects/7vrwonders/index.html", "http://www1.sp.senac.br/hotsites/blogs/revistainiciacao/index.php/modelagem-realistica-de-cabeca-infantil-para-aplicacao-em-simulador-de-anestesia-odontologica/" ],
+	"Frame_web":[ "http://mic.sp.senac.br/", "http://www.idsbrasil.org/" ],
+	"Frame_games":[ "http://store.steampowered.com/app/529630/The_Rabbit_Hole/", "http://menteturbinada.com.br/"]
+	};
+	  
+	function setLinks()
+	{
+	  gameInstance.SendMessage("CameraControl", "getLinks", JSON.stringify(json));
+	}
+	//setLinks();
+	
+	function gotolink(tipo, posicao)
+	{
+		//console.log(json[tipo][posicao]);
+		if(tipo !="linkedin"){
+			window.open(json[tipo][posicao], '_blank');
+		}else{
+			window.open(posicao, '_blank');
+
+		}
+	}	
+	
+	function volume(sinal) {			
+			gameInstance.SendMessage("CameraControl", "change_volume", sinal);
+		
+	}
+	
+	function getXYaxis(event) {		
+		//var coords = "X coords: " + x + ", Y coords: " + y;
+		//var w = window.innerWidth/360;
+		//var h = window.innerHeight/90;
+		
+		/*var pitch = 2*(y - (center_y + recenter))/h;
+		var yaw = 2*(x - (window.innerWidth/2))/w;
+		
+		if(pitch < -90){
+			recenter = Math.abs(pitch) - 91;			
+			pitch = -90;
+		}else if(pitch > 90){
+			recenter = (pitch - 91)*(-1);			
+			pitch = 90;
+		}else {
+			recenter = 0;
+		}*/
+		
+		if(cursorX < event.clientX){
+		
+			
+			inputX = Math.abs((cursorX - event.clientX)/window.innerWidth)*sensibility;
+		}else{
+			inputX = -1*Math.abs((cursorX - event.clientX)/window.innerWidth)*sensibility;
+		}
+		
+		if(cursorY < event.clientY){
+			inputY = -1*Math.abs((cursorY - event.clientY)/window.innerHeight)*sensibility;
+		}else{
+			inputY = Math.abs((cursorY - event.clientY)/window.innerHeight)*sensibility;
+		}		
+		
+		cursorX = event.clientX;
+		cursorY = event.clientY;		
+		
+		var input = inputX+";"+inputY;
+		//console.log(pos);
+		//console.log(d.getTime());
+		if(start_all && holdingClick)
+			gameInstance.SendMessage("CameraControl", "mouse", input);
+	}
+	
+	function printMousePos(event) {
+		var n = d.getTime();
+		var now = new Date();
+		if(now.getTime() - n > 200 && start_all){
+			d = new Date();	
+			if(start_all)
+				gameInstance.SendMessage("CameraControl", "click", "teste");
+		}
+	}
+	
+	function adjustLogo(){
+		if(start_all)
+			gameInstance.SendMessage("CameraControl", "adjust_logo");
+	}
+	
+	function goto(divId){
+		document.getElementById(divId).scrollIntoView();
+	}
+	function startAll(OnOff){
+		start_all = OnOff;	
+	}
+	
+	function gotoWeb(web){
+		window.open(web.toString(), '_blank');
+	}
+	
+	function holdingClickEvent(){
+		holdingClick = true;
+	}
+	
+	function releasingClickEvent(){
+		holdingClick = false;
+	}
+	
+	document.addEventListener("click", printMousePos);
+	
+	
+    </script>
+  </head>
+  <body>
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.11';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+	<div class="bg" onmousemove="getXYaxis(event)" onmouseup="releasingClickEvent()"></div>
+    <div class="webgl-content" style="cursor:pointer">
+      <div id="gameContainer" style="width: 960px; height: 600px" onmousemove="getXYaxis(event)" onmousedown="holdingClickEvent()" onmouseup="releasingClickEvent()"></div>
+      <div class="footer">
+	  
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>			
+	<div class="down"></div>       
+	   
+      </div>
+    </div>
+  </body>
+</html>
