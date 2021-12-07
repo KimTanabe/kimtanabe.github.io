@@ -22,7 +22,7 @@
 .btnMinus {background-image: url('vol-.png'); background-color: rgba(0,0,0,0); background-repeat: no-repeat; float: left; width: 50px; height: 50px;}
 .btnPlus:hover { background-image: url('volmais_hover.png')}
 .btnMinus:hover {background-image: url('vol-_hover.png')}
-.down {background-image: url('down.jpg'); float:left; width: 38px; height: 38px}
+.down {background-image: url('faag.jpeg'); float:left; width: 93px; height: 38px}
 .fb-like { padding-right: 2%; padding-bottom: -50px;padding-top: -50px; float: right;}
 
 body, html {
